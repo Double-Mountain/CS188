@@ -492,7 +492,7 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     h, c = 0, 0
     for food in foodList + list(fakeFood):
         if (food not in excludeFood):
-            h += util.manhattanDistance(position, food)
+            h += mazeDistance(position, food, problem.startingGameState)
             c += 1
     if c > 0:
         h /= c
