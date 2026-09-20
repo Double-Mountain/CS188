@@ -77,10 +77,14 @@ class ReflexAgent(Agent):
         "*** YOUR CODE HERE ***"
         h = 0
         foodList = newFood.asList()
-        for food in foodList:
-            h -= manhattanDistance(newPos, food)
-        if len(foodList) > 0:
-            h /= len(foodList)
+        dList = [manhattanDistance(newPos, food) for food in foodList]
+        length = len(dList)
+        s = sum(dList)
+        for d in dList:
+            if (length > 1):
+                h -= d * (1 - d / s) / (length - 1)
+            else:
+                h -= d
         ghosts = [manhattanDistance(newPos, ghostState.getPosition()) for ghostState in newGhostStates]
         h -= max([100 / (1 + ghosts[i]) / (1 + newScaredTimes[i]) for i in range(len(ghosts))])
         return h + successorGameState.getScore() * 10
@@ -266,13 +270,16 @@ def betterEvaluationFunction(currentGameState: GameState):
 
     h = 0
     foodList = newFood.asList()
-    for food in foodList:
-        h -= manhattanDistance(newPos, food)
-    if len(foodList) > 0:
-        h /= len(foodList)
+    dList = [manhattanDistance(newPos, food) for food in foodList]
+    length = len(dList)
+    s = sum(dList)
+    for d in dList:
+        if (length > 1):
+            h -= d * (1 - d / s) / (length - 1)
+        else:
+            h -= d
     ghosts = [manhattanDistance(newPos, ghostState.getPosition()) for ghostState in newGhostStates]
     h -= max([100 / (1 + ghosts[i]) / (1 + newScaredTimes[i]) for i in range(len(ghosts))])
     return h + currentGameState.getScore() * 10
-
 # Abbreviation
 better = betterEvaluationFunction
